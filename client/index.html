@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Real_time stream</title>
+
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/v8/js/anychart-tag-cloud.min.js"></script>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" 
+  rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" 
+  crossorigin="anonymous">
+
+  <style type="text/css">
+    html, body, #container {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+/* .container{
+    text-align: center;
+} */
+</style>
+   
+    
+</head>
+<body>   
+        <div class="container text-center mt-2">
+            <h2 href="" class="navbar-brand">50 most Trending Topics</h2>
+        </div>
+    
+    <div id="container">
+        <!-- <div id="tweetTrend"></div> -->
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" 
+    integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" 
+    crossorigin="anonymous"></script>
+
+    <script>
+        const tweetTrend= document.getElementById('tweetTrend');
+        const socket= io();
+
+        var tweets = [];
+
+
+        socket.on('connect', ()=>{
+            console.log('connected to server...')
+        })
+
+        socket.on('tweet', (tweet)=>{
+           //  console.log(tweet);
+           const trends=`${tweet[0].trends}`
+             for(var i=0;i<trends.length;i++){
+
+            tweets.push(
+                    {'x':`#${tweet[0].trends[i].name}`,'value':`${tweet[0].trends[i].tweet_volume}`}
+                );
+                
+                if (i === 49){
+                    anychart.onDocumentReady(myWordCloud(tweets))
+
+                    function myWordCloud(hashtags){
+                         //create a tag (word) cloud chart
+                        var chart = anychart.tagCloud(hashtags);
+                        // set a chart title
+                        // chart.title('50 most trending topics')
+                        // set an array of angles at which the words will be laid out
+                        chart.angles([0])
+                        // enable a color range
+                        chart.colorRange(true);
+                        // set the color range length
+                        chart.colorRange().length('80%');
+                        // display the word cloud chart
+                        chart.container("container");
+                        chart.draw();
+                    }
+    }
+}
+})
+    </script>
+</script>
+</body>
+</html>
