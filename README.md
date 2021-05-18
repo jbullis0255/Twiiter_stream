@@ -10,6 +10,8 @@ Pre-requisites===> Prior Knowledge with Javascript and use of Node.js and its de
   3. path
   4. Http
   5. sockets
+  6.dotenv
+  
 
 NB: 
 please download Node from the node website (nodejs.org) first if you dont have it  
